@@ -13,11 +13,12 @@ namespace Tema2_2.Controllers
     public class ProductsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private CartController cc = new CartController();
-        //Cart c = new Cart();
+        //private CartController cc = new CartController();
+        Cart c;
         // GET: Products
         public ActionResult Index()
         {
+            
             return View(db.Products.ToList());
         }
 
@@ -26,8 +27,15 @@ namespace Tema2_2.Controllers
         //public ActionRezult Buy()
         public ActionResult Buy()
         {
+            if (Session["cart"] == null)
+            {
+                c = new Cart();
+                Session["cart"] = c;
+            }
             //ViewBag.Message = cc.ShowCart();
-            ViewBag.Message = cc.ShowCart();
+            //String s = c.CartProducts();
+            var cart = Session["cart"] as Cart;
+            ViewBag.Message = cart.CartProducts();
             return View(); 
             //return cc.ShowCart();
         }
@@ -35,15 +43,22 @@ namespace Tema2_2.Controllers
         public void AddToCart(int? id)
         {
             String prevPage = Request.UrlReferrer.ToString();
+            if (Session["cart"] == null)
+            {
+                c = new Cart();
+                Session["cart"] = c;
+            }
             if (id == null)
             {
                 throw new NullReferenceException();
             }
-            Product product = db.Products.Find(id);
+            var product = db.Products.Find(id);
            // Console.Write("Adaugare!\n");
             if (product != null && product.Quantity>0)
             {
-                cc.Add(product);
+                var cart = Session["cart"] as Cart;
+                cart.AddToCart(product);
+                Session["cart"] = cart;
                 
             }
             //return this.Index();

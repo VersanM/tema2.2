@@ -39,16 +39,16 @@ namespace Tema2_2.Models
             //Console.WriteLine("-----Afisare PRODUSE CART!!!--------");
             if(products == null)
             {
-                return "Cart is empty!";
+                return "<p>Cart is empty!</p>";
             }
 
-            String s = "Products:\n";
+            String s = "Products: ";
             
             for(int i=0; i<Len; i++)
             {
-                s = s + products[i].Name + products[i].Price + "\n";
+                s = s + products[i].Name + products[i].Price + "; ";
             }
-            return s +";Total cost: "+ CalculateTotalCost();
+            return s + "Total cost: " + CalculateTotalCost();
         }
     }
 }
